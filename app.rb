@@ -37,8 +37,10 @@ post '/callback' do
         #ファイル名が.txtになっているか確認
         #ファイルのIDでLINEサーバからtxtデータを取得する
           #文字のエンコードによっては文字化けするかも？
-        response = client.get_message_content(event.message['id'])
-        tf = Tempfile.open("content")
+        response = client.get_message_content("<messageId>")
+        case response
+        when Net::HTTPSuccess then
+          tf = Tempfile.open("content")
         #取得したtxtファイルを加工
         #クイックリプライにクライアントが過去に送信したのメッセージを入れる
         #一番初めのメッセージを送信
