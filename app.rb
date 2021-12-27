@@ -45,6 +45,7 @@ post '/callback' do
         #クイックリプライにクライアントが過去に送信したのメッセージを入れる
         #一番初めのメッセージを送信
           #初めのメッセージがクライアントの場合"スタート"のメッセージから始める
+        end
 
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
