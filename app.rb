@@ -38,7 +38,7 @@ post '/callback' do
         
         #ファイルのIDでLINEサーバからtxtデータを取得する
           #文字のエンコードによっては文字化けするかも？
-        response = client.get_message_content("<messageId>") #引数にevent.message['id']を指定することでURI生成＋ファイルをGETリクエスト
+        response = client.get_message_content(event.message['id']) #引数にevent.message['id']を指定することでURI生成＋ファイルをGETリクエスト
         case response
         when Net::HTTPSuccess then
           tf = Tempfile.open("content")
