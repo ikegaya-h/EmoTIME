@@ -50,6 +50,12 @@ post '/callback' do
         tf.write(response.body)
       end
     end
+    when Line::Bot::Event::Follow
+      #LINEのユーザーIDを元にDBにユーザー作成
+    end
+    when Line::Bot::Event::Unfollow
+      #DBからユーザーを削除
+    end
   end
 
   # Don't forget to return a successful response
