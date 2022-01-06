@@ -35,7 +35,13 @@ post '/callback' do
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::File
         #ファイル名が.txtになっているか確認
-        
+        unless /[LINE] [!-~]{1,}とのトーク.txt/ === event.message.fileName
+          message = {
+            type: 'text',
+            text: "指定のファイルと異なります"
+          }
+          client.reply_message(event['replyToken'], message)
+        end
         #ファイルのIDでLINEサーバからtxtデータを取得する
           #文字のエンコードによっては文字化けするかも？
         response = client.get_message_content(event.message['id']) #引数にevent.message['id']を指定することでURI生成＋ファイルをGETリクエスト
