@@ -40,7 +40,7 @@ post '/callback' do
             type: 'text',
             text: "指定のファイルと異なります"
           }
-          client.reply_message(event['replyToken'], message)
+          return client.reply_message(event['replyToken'], message)
         end
         #ファイルのIDでLINEサーバからtxtデータを取得する
           #文字のエンコードによっては文字化けするかも？
