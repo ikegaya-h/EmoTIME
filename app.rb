@@ -47,7 +47,8 @@ post '/callback' do
         response = client.get_message_content(event.message['id']) #引数にevent.message['id']を指定することでURI生成＋ファイルをGETリクエスト
         case response
         when Net::HTTPSuccess then
-          tf = Tempfile.open("content")
+          #response.body -> Strings
+          txt = response.body.lines(chomp: true)
         #取得したtxtファイルを加工
         #クイックリプライにクライアントが過去に送信したのメッセージを入れる
         #一番初めのメッセージを送信
