@@ -49,7 +49,25 @@ post '/callback' do
         when Net::HTTPSuccess then
           #response.body -> Strings
           txt = response.body.lines(chomp: true)
-        #取得したtxtファイルを加工
+          #配列を整形
+          #保存日時と改行のみの行を削除
+          txt.each do |s|
+            if "\r" == s
+              txt.delete(s)
+            elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
+              txt.delete(s)
+            end
+          end
+
+          #時系列と発言者と発言内容を二重配列に整頓
+          #行が変化する加工が完了したら実行
+          count = 0
+          txt.each do |s|
+            if /[0-2][0-9]:[0-5][0-9]/ === s
+              txt[count] = s.split(/\t/)
+            end
+            count += 1
+          end
         #クイックリプライにクライアントが過去に送信したのメッセージを入れる
         #一番初めのメッセージを送信
           #初めのメッセージがクライアントの場合"スタート"のメッセージから始める
