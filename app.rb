@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'line/bot'
 
+#clientの設定情報をgitignoreできるように別ファイルに切り出す（予定）
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_id = ENV["LINE_CHANNEL_ID"]
