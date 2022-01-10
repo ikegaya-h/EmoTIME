@@ -69,7 +69,7 @@ post '/callback' do
             end
             count += 1
           end
-          
+
         #クイックリプライにクライアントが過去に送信したメッセージを入れる
           #ユーザーを取得
           user = User.find_by!(user: client.channel_id)
@@ -97,6 +97,26 @@ post '/callback' do
 
         #一番初めのメッセージを送信
           #初めのメッセージがクライアントの場合"スタート"のメッセージから始める
+          message = {
+            type: 'text',
+            text: send_message,
+            sender: {
+              name: sender_name
+            }
+            quickReply: {
+              items: [
+                {
+                  type: "action",
+                  action: {
+                    type: "message",
+                    label: "返信",
+                    text: set_message
+                  }
+                }
+              ]
+            }
+          }
+          client.reply_message(event['replyToken'], message)
         end
 
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
