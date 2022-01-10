@@ -69,7 +69,32 @@ post '/callback' do
             end
             count += 1
           end
-        #クイックリプライにクライアントが過去に送信したのメッセージを入れる
+          
+        #クイックリプライにクライアントが過去に送信したメッセージを入れる
+          #ユーザーを取得
+          user = User.find_by!(user: client.channel_id)
+          #配列の時系列の初期値を保存
+          count = 2
+          if txt[2][1] = txt[0]
+            while txt[count][1] = txt[0] do
+              send_message += txt[count][2]\n
+              count += 1
+            end
+            until txt[count][1] = txt[0] do
+              set_message += txt[count][2]\n
+              count += 1
+            end
+          else
+            send_message = "スタート"
+            until txt[count][1] = txt[0] do
+              set_message += txt[count][2]\n
+              count += 1
+            end
+          end
+          sender_name = txt[count][1]
+          user.replay_point = count
+          user.save!
+
         #一番初めのメッセージを送信
           #初めのメッセージがクライアントの場合"スタート"のメッセージから始める
         end
