@@ -93,6 +93,8 @@ post '/callback' do
           end
           sender_name = txt[count][1]
           user.replay_point = count
+          #後にファイルを呼び出すときのメッセージIDを保存
+          user.file_id = event.message['id']
           user.save!
 
         #一番初めのメッセージを送信
