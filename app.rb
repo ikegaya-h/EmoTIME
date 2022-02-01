@@ -73,25 +73,26 @@ post '/callback' do
         #クイックリプライにクライアントが過去に送信したメッセージを入れる
           #ユーザーを取得
           user = User.find_by!(user: client.channel_id)
+          #送られてきたtxtファイルのトークルーム名を役名として保存
+          user.official_title = txt[0]
           #配列の時系列の初期値を保存
           count = 2
-          if txt[2][1] = txt[0]
-            while txt[count][1] = txt[0] do
+          if txt[2][1] = user.official_title
+            while txt[count][1] = user.official_title do
               send_message += txt[count][2]\n
               count += 1
             end
-            until txt[count][1] = txt[0] do
+            until txt[count][1] = user.official_title do
               set_message += txt[count][2]\n
               count += 1
             end
           else
             send_message = "スタート"
-            until txt[count][1] = txt[0] do
+            until txt[count][1] = user.official_title do
               set_message += txt[count][2]\n
               count += 1
             end
           end
-          sender_name = txt[count][1]
           user.replay_point = count
           #後にファイルを呼び出すときのメッセージIDを保存
           user.file_id = event.message['id']
@@ -103,7 +104,7 @@ post '/callback' do
             type: 'text',
             text: send_message,
             sender: {
-              name: sender_name
+              name: user.official_title
             }
             quickReply: {
               items: [
