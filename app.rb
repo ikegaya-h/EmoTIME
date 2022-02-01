@@ -24,14 +24,78 @@ post '/callback' do
     when Line::Bot::Event::Message #eventの文字とモジュールの定数が一致しているか比較している
       case event.type #セッターとゲッターを自動で定義するメソッドによって中身の読み書きができる
       when Line::Bot::Event::MessageType::Text
+        #ユーザーを取得
+        user = User.find_by!(user: client.channel_id)
+        #ファイルのIDでLINEサーバからtxtデータを取得する
+        txt = client.get_message_content(user.file_id)
+        #配列を整形
+          #保存日時と改行のみの行を削除
+        txt.each do |s|
+          if "\r" == s
+            txt.delete(s)
+          elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
+            txt.delete(s)
+          end
+        end
+        #時系列と発言者と発言内容を二重配列に整頓
+        #行が変化する加工が完了したら実行
+        count = 0
+        txt.each do |s|
+          if /[0-2][0-9]:[0-5][0-9]/ === s
+            txt[count] = s.split(/\t/)
+          end
+          count += 1
+        end
         #クイックリプライにセットしたメッセージと一致しているか確認
           #やりとりの最後なら終了メッセージを送信
           #クイックリプライと一致していなければメッセージを再送
-        #どこまでやり取りしたかをDBに保存
+        count = user.replay_point
+        if client.reply_message = txt[user.resending_point][1]
+          while txt[count][1] = user.official_title do
+            send_message += txt[count][2]\n
+            count += 1
+          end
+          until txt[count][1] = user.official_title do
+            set_message += txt[count][2]\n
+            count += 1
+          end
+          user.resending_point = user.replay_point
+          unless set_message
+            set_message = "~end~"
+            user.replay_point = 2
+          end
+          #どこまでやり取りしたかをDBに保存
+          user.save!
+        else
+          count = user.resending_point
+          while txt[count][1] = user.official_title do
+            send_message += txt[count][2]\n
+            count += 1
+          end
+          until txt[count][1] = user.official_title do
+            set_message += txt[count][2]\n
+            count += 1
+          end
+        end
         #返信メッセージを生成
         message = {
           type: 'text',
-          text: event.message['text']
+          text: send_message,
+          sender: {
+            name: user.official_title
+          }
+          quickReply: {
+            items: [
+              {
+                type: "action",
+                action: {
+                  type: "message",
+                  label: "返信",
+                  text: set_message
+                }
+              }
+            ]
+          }
         }
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::File
@@ -77,6 +141,7 @@ post '/callback' do
           user.official_title = txt[0]
           #配列の時系列の初期値を保存
           count = 2
+          user.resending_point = count
           if txt[2][1] = user.official_title
             while txt[count][1] = user.official_title do
               send_message += txt[count][2]\n
