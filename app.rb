@@ -195,6 +195,9 @@ post '/callback' do
     end
     when Line::Bot::Event::Follow
       #LINEのユーザーIDを元にDBにユーザー作成
+      user = User.new
+      user.user_id = event.source.userId
+      user.save!
     end
     when Line::Bot::Event::Unfollow
       #DBからユーザーを削除
