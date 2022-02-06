@@ -201,6 +201,8 @@ post '/callback' do
     end
     when Line::Bot::Event::Unfollow
       #DBからユーザーを削除
+      user = User.find_by!(user: client.channel_id)
+      user.destroy!
     end
   end
 
