@@ -95,7 +95,6 @@ class UsersController < ApplicationController
             }
           }
           client.reply_message(event['replyToken'], message)
-        end
         when Line::Bot::Event::MessageType::File
           #ファイル名が.txtになっているか確認
           unless /[LINE] [!-~]{1,}とのトーク.txt/ === event.message.fileName
@@ -185,21 +184,17 @@ class UsersController < ApplicationController
             client.reply_message(event['replyToken'], message)
           end
         end
-      end
+
       when Line::Bot::Event::Follow
         #LINEのユーザーIDを元にDBにユーザー作成
         user = User.new
         user.user_id = event.source.userId
         user.save!
-      end
       when Line::Bot::Event::Unfollow
         #DBからユーザーを削除
         user = User.find_by!(user: client.channel_id)
         user.destroy!
       end
     end
-  
-    # Don't forget to return a successful response
-    "OK"
   end
 end
