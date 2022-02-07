@@ -80,7 +80,7 @@ class UsersController < ApplicationController
             text: send_message,
             sender: {
               name: user.official_title
-            }
+            },
             quickReply: {
               items: [
                 {
@@ -167,7 +167,7 @@ class UsersController < ApplicationController
               text: send_message,
               sender: {
                 name: user.official_title
-              }
+              },
               quickReply: {
                 items: [
                   {
