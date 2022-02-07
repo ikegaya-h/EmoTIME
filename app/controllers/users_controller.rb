@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     events = client.parse_events_from(body) #bodyの中身(JSON)をイベントだけ取り出してhashにする
     events.each do |event| #文字通り送られたイベントhashを一つづつ入れている
       case event
-      when Line::Bot::Event::Message #eventの文字とモジュールの定数が一致しているか比較している
+      when Line::Bot::Event::Message then #eventの文字とモジュールの定数が一致しているか比較している
         case event.type #セッターとゲッターを自動で定義するメソッドによって中身の読み書きができる
         when Line::Bot::Event::MessageType::Text
           #ユーザーを取得
@@ -185,12 +185,12 @@ class UsersController < ApplicationController
           end
         end
 
-      when Line::Bot::Event::Follow
+      when Line::Bot::Event::Follow then
         #LINEのユーザーIDを元にDBにユーザー作成
         user = User.new
         user.user_id = event.source.userId
         user.save!
-      when Line::Bot::Event::Unfollow
+      when Line::Bot::Event::Unfollow then
         #DBからユーザーを削除
         user = User.find_by!(user: client.channel_id)
         user.destroy!
