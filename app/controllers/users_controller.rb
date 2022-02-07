@@ -49,11 +49,11 @@ class UsersController < ApplicationController
           count = user.replay_point
           if client.reply_message = txt[user.resending_point][1]
             while txt[count][1] = user.official_title do
-              send_message += txt[count][2]\n
+              send_message += "#{txt[count][2]}\n"
               count += 1
             end
             until txt[count][1] = user.official_title do
-              set_message += txt[count][2]\n
+              set_message += "#{txt[count][2]}\n"
               count += 1
             end
             user.resending_point = user.replay_point
@@ -66,11 +66,11 @@ class UsersController < ApplicationController
           else
             count = user.resending_point
             while txt[count][1] = user.official_title do
-              send_message += txt[count][2]\n
+              send_message += "#{txt[count][2]}\n"
               count += 1
             end
             until txt[count][1] = user.official_title do
-              set_message += txt[count][2]\n
+              set_message += "#{txt[count][2]}\n"
               count += 1
             end
           end
@@ -141,17 +141,17 @@ class UsersController < ApplicationController
             user.resending_point = count
             if txt[2][1] = user.official_title
               while txt[count][1] = user.official_title do
-                send_message += txt[count][2]\n
+                send_message += "#{txt[count][2]}\n"
                 count += 1
               end
               until txt[count][1] = user.official_title do
-                set_message += txt[count][2]\n
+                set_message += "#{txt[count][2]}\n"
                 count += 1
               end
             else
               send_message = "スタート"
               until txt[count][1] = user.official_title do
-                set_message += txt[count][2]\n
+                set_message += "#{txt[count][2]}\n"
                 count += 1
               end
             end
