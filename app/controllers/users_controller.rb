@@ -185,11 +185,6 @@ class UsersController < ApplicationController
             client.reply_message(event['replyToken'], message)
           end
         end
-        when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
-          response = client.get_message_content(event.message['id'])
-          tf = Tempfile.open("content")
-          tf.write(response.body)
-        end
       end
       when Line::Bot::Event::Follow
         #LINEのユーザーIDを元にDBにユーザー作成
