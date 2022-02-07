@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: MyString
+  official_title: MyString
+  resending_point: 1
+  replay_point: 1
+  file_id: MyString
+
+two:
+  user_id: MyString
+  official_title: MyString
+  resending_point: 1
+  replay_point: 1
+  file_id: MyString
