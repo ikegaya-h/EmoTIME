@@ -6,7 +6,7 @@ class UsersController < ApplicationController
       config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
     }
   end
-  
+
   def callback
     body = request.body.read #送られてきたJSONを開いてbodyに格納
 
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
     unless client.validate_signature(body, signature)
       error 400 do 'Bad Request' end
     end
-  
+
     events = client.parse_events_from(body) #bodyの中身(JSON)をイベントだけ取り出してhashにする
     events.each do |event| #文字通り送られたイベントhashを一つづつ入れている
       case event
@@ -120,7 +120,6 @@ class UsersController < ApplicationController
                 txt.delete(s)
               end
             end
-  
             #時系列と発言者と発言内容を二重配列に整頓
             #行が変化する加工が完了したら実行
             count = 0
@@ -130,7 +129,6 @@ class UsersController < ApplicationController
               end
               count += 1
             end
-  
           #クイックリプライにクライアントが過去に送信したメッセージを入れる
             #ユーザーを取得
             user = User.find_by!(user: client.channel_id)
@@ -159,7 +157,6 @@ class UsersController < ApplicationController
             #後にファイルを呼び出すときのメッセージIDを保存
             user.file_id = event.message['id']
             user.save!
-  
           #一番初めのメッセージを送信
             #初めのメッセージがクライアントの場合"スタート"のメッセージから始める
             message = {
@@ -184,7 +181,6 @@ class UsersController < ApplicationController
             client.reply_message(event['replyToken'], message)
           end
         end
-
       when Line::Bot::Event::Follow then
         #LINEのユーザーIDを元にDBにユーザー作成
         user = User.new
