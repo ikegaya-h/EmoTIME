@@ -192,6 +192,6 @@ class UsersController < ApplicationController
         user.destroy!
       end
     end
-    status: 200
+    "ok"
   end
 end
