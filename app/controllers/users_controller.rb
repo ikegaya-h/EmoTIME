@@ -184,7 +184,7 @@ class UsersController < ApplicationController
       when Line::Bot::Event::Follow then
         #LINEのユーザーIDを元にDBにユーザー作成
         user = User.new
-        user.user_id = event.source.userId
+        user.user_id = event["source"]["userId"]
         user.save!
       when Line::Bot::Event::Unfollow then
         #DBからユーザーを削除
