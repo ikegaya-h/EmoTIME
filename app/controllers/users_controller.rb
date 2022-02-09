@@ -97,7 +97,7 @@ class UsersController < ApplicationController
           client.reply_message(event['replyToken'], message)
         when Line::Bot::Event::MessageType::File
           #ファイル名が.txtになっているか確認
-          unless /[LINE] [!-~]{1,}とのトーク.txt/ === event.message.fileName
+          unless /[LINE] [!-~]{1,}とのトーク.txt/ === event["message"]["fileName"]
             message = {
               type: 'text',
               text: "指定のファイルと異なります"
