@@ -135,7 +135,7 @@ class UsersController < ApplicationController
             end
           #クイックリプライにクライアントが過去に送信したメッセージを入れる
             #ユーザーを取得
-            user = User.find_by!(user: client.channel_id)
+            user = User.find_by!(user_id: client.channel_id)
             #送られてきたtxtファイルのトークルーム名を役名として保存
             user.official_title = txt[0]
             #配列の時系列の初期値を保存
