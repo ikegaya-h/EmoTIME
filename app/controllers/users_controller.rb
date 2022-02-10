@@ -26,9 +26,7 @@ class UsersController < ApplicationController
           #ファイルのIDでLINEサーバからtxtデータを取得する
           txt = client.get_message_content(user.file_id)
           #CompatibilityError回避のため正規表現と同じエンコードを指定
-          txt.each do |s|
-            s.encode!(Encoding::UTF_8)
-          end
+          txt.force_encoding('utf-8')
           #配列を整形
             #保存日時と改行のみの行を削除
           txt.each do |s|
@@ -116,9 +114,7 @@ class UsersController < ApplicationController
             #response.body -> Strings
             txt = response.body.lines(chomp: true)
             #CompatibilityError回避のため正規表現と同じエンコードを指定
-            txt.each do |s|
-              s.encode!(Encoding::UTF_8)
-            end
+            txt.force_encoding('utf-8')
             #配列を整形
             #保存日時と改行のみの行を削除
             txt.each do |s|
