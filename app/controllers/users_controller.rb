@@ -15,6 +15,9 @@ class UsersController < ApplicationController
       error 400 do 'Bad Request' end
     end
 
+    send_message = ""
+    set_message = ""
+
     events = client.parse_events_from(body) #bodyの中身(JSON)をイベントだけ取り出してhashにする
     events.each do |event| #文字通り送られたイベントhashを一つづつ入れている
       case event
