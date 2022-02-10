@@ -52,12 +52,12 @@ class UsersController < ApplicationController
             #やりとりの最後なら終了メッセージを送信
             #クイックリプライと一致していなければメッセージを再送
           count = user.replay_point
-          if client.reply_message = txt[user.resending_point][1]
-            while txt[count][1] = user.official_title do
+          if client.reply_message == txt[user.resending_point][1]
+            while txt[count][1] == user.official_title do
               send_message += "#{txt[count][2]}\n"
               count += 1
             end
-            until txt[count][1] = user.official_title do
+            until txt[count][1] == user.official_title do
               set_message += "#{txt[count][2]}\n"
               count += 1
             end
@@ -70,11 +70,11 @@ class UsersController < ApplicationController
             user.save!
           else
             count = user.resending_point
-            while txt[count][1] = user.official_title do
+            while txt[count][1] == user.official_title do
               send_message += "#{txt[count][2]}\n"
               count += 1
             end
-            until txt[count][1] = user.official_title do
+            until txt[count][1] == user.official_title do
               set_message += "#{txt[count][2]}\n"
               count += 1
             end
@@ -144,18 +144,18 @@ class UsersController < ApplicationController
             #配列の時系列の初期値を保存
             count = 2
             user.resending_point = count
-            if txt[2][1] = user.official_title
-              while txt[count][1] = user.official_title do
+            if txt[2][1] == user.official_title
+              while txt[count][1] == user.official_title do
                 send_message += "#{txt[count][2]}\n"
                 count += 1
               end
-              until txt[count][1] = user.official_title do
+              until txt[count][1] == user.official_title do
                 set_message += "#{txt[count][2]}\n"
                 count += 1
               end
             else
               send_message = "スタート"
-              until txt[count][1] = user.official_title do
+              until txt[count][1] == user.official_title do
                 set_message += "#{txt[count][2]}\n"
                 count += 1
               end
