@@ -117,7 +117,6 @@ class UsersController < ApplicationController
             }
             client.reply_message(event['replyToken'], message)
           end
-        end
         when Line::Bot::Event::MessageType::File
           #ファイル名が.txtになっているか確認
           unless /とのトーク.txt/ === event["message"]["fileName"]
