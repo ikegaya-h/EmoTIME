@@ -30,15 +30,15 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.gsub!(%r{/\n/}) { '' }
+              txt << line.force_encoding("utf-8").gsub!(/\r/) { '' }
             end
-            txt.map { |n| n.force_encoding("utf-8") }
+            # txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
               if s == ""
                 txt.delete(s)
-              elsif %r{保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]} === s
+              elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
               end
             end
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
               case s
               when /[0-2][0-9]:[0-5][0-9]/
                 txt[count].gsub!(/\"/) { '' }
-                txt[count] = s.split(%r{/\t/})
+                txt[count] = s.split(/\t/})
               when /\"/
                 previous = count - 1
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
@@ -57,11 +57,11 @@ class UsersController < ApplicationController
             count = user.replay_point
             if client.reply_message == txt[user.resending_point][1]
               while txt[count][1] == user.official_title
-                send_message += "#{txt[count][2]}\n"
+                send_message += "#{txt[count][2]}\r"
                 count += 1
               end
               until txt[count][1] == user.official_title
-                set_message += "#{txt[count][2]}\n"
+                set_message += "#{txt[count][2]}\r"
                 count += 1
               end
               user.resending_point = user.replay_point
@@ -73,11 +73,11 @@ class UsersController < ApplicationController
             else
               count = user.resending_point
               while txt[count][1] == user.official_title
-                send_message += "#{txt[count][2]}\n"
+                send_message += "#{txt[count][2]}\r"
                 count += 1
               end
               until txt[count][1] == user.official_title
-                set_message += "#{txt[count][2]}\n"
+                set_message += "#{txt[count][2]}\r"
                 count += 1
               end
             end
@@ -115,16 +115,16 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.gsub!(/\n/) { '' }
+              txt << line.force_encoding("utf-8").gsub!(/\r/) { '' }
             end
             p txt
-            txt.map { |n| n.force_encoding("utf-8") }
+            # txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
               if s == ""
                 txt.delete(s)
-              elsif %r{/保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/} === s
+              elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
               end
             end
@@ -134,10 +134,10 @@ class UsersController < ApplicationController
               case s
               when /[0-2][0-9]:[0-5][0-9]/
                 txt[count].gsub!(/\"/) { '' }
-                txt[count] = s.split(%r{/\t/})
-              when %r{/\"/}
+                txt[count] = s.split(/\t/})
+              when /\"/
                 previous = count - 1
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(%r{/\"/}) { '' }]
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/}) { '' }]
               end
               count += 1
             end
@@ -148,17 +148,17 @@ class UsersController < ApplicationController
             user.resending_point = count
             if txt[count][1] == user.official_title
               while txt[count][1] == user.official_title
-                send_message += "#{txt[count][2]}\n"
+                send_message += "#{txt[count][2]}\r"
                 count += 1
               end
               until txt[count][1] == user.official_title
-                set_message += "#{txt[count][2]}\n"
+                set_message += "#{txt[count][2]}\r"
                 count += 1
               end
             else
               send_message = "スタート"
               until txt[count][1] == user.official_title
-                set_message += "#{txt[count][2]}\n"
+                set_message += "#{txt[count][2]}\r"
                 count += 1
               end
             end
