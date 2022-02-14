@@ -32,11 +32,11 @@ class UsersController < ApplicationController
             response.body.each_line do |line|
               txt << line.force_encoding("utf-8")
             end
-            # txt.map { |n| n.force_encoding("utf-8") }
+            txt.map { |n| n.gsub!(/\r\n/) { '' } }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
-              if s == "\r\n"
+              if s == ""
                 txt.delete(s)
               elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
@@ -49,7 +49,8 @@ class UsersController < ApplicationController
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
                 previous = count - 1
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
+                txt[count].gsub!(/\"/) { '' }
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
               end
               count += 1
             end
@@ -117,11 +118,11 @@ class UsersController < ApplicationController
               txt << line.force_encoding("utf-8")
             end
             p txt
-            # txt.map { |n| n.force_encoding("utf-8") }
+            txt.map { |n| n.gsub!(/\r\n/) { '' } }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
-              if s == "\r\n"
+              if s == ""
                 txt.delete(s)
               elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
@@ -135,12 +136,8 @@ class UsersController < ApplicationController
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
                 previous = count - 1
-                p previous
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
-                p txt[count]
-                p txt[previous][0]
-                p txt[previous][1]
-                p txt[count].gsub!(/\"/) { '' }
+                txt[count].gsub!(/\"/) { '' }
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
               end
               count += 1
             end
