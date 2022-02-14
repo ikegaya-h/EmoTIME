@@ -119,6 +119,8 @@ class UsersController < ApplicationController
             #CompatibilityError回避のため正規表現と同じエンコードを指定
             txt.map {|n| n.force_encoding('utf-8') }
             #配列を整形
+            txt[0] = txt[0].delete("[LINE] ")
+            txt[0] = txt[0].delete("とのトーク履歴")
             #保存日時と改行のみの行を削除
             txt.each do |s|
               if "\r" == s
