@@ -34,14 +34,14 @@ class UsersController < ApplicationController
             #response.body -> Strings
             txt = []
             response.body.each_line { |line|
-            txt << line.gsub!(/\n/) { '' }
+              txt << line.gsub!(/\n/) { '' }
             }
             #CompatibilityError回避のため正規表現と同じエンコードを指定
             txt.map {|n| n.force_encoding('utf-8') }
             #配列を整形
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
-            #保存日時と改行のみの行を削除
+            #1.保存日時と改行のみの行を削除
             txt.each do |s|
               if "" == s
                 txt.delete(s)
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
                 txt.delete(s)
               end
             end
-            #時系列と発言者と発言内容を二重配列に整頓
+            #2.時系列と発言者と発言内容を二重配列に整頓
             #行が変化する加工が完了したら実行
             count = 0
             txt.each do |s|
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
               end
               count += 1
             end
-            #クイックリプライにセットしたメッセージと一致しているか確認
+            #3.クイックリプライにセットしたメッセージと一致しているか確認
               #やりとりの最後なら終了メッセージを送信
               #クイックリプライと一致していなければメッセージを再送
             count = user.replay_point
@@ -95,7 +95,7 @@ class UsersController < ApplicationController
                 count += 1
               end
             end
-            #返信メッセージを生成
+            #4.返信メッセージを生成
             message = {
               type: 'text',
               text: send_message,
@@ -141,7 +141,7 @@ class UsersController < ApplicationController
             #配列を整形
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
-            #保存日時と改行のみの行を削除
+            #1.保存日時と改行のみの行を削除
             txt.each do |s|
               if "" == s
                 txt.delete(s)
@@ -149,7 +149,7 @@ class UsersController < ApplicationController
                 txt.delete(s)
               end
             end
-            #時系列と発言者と発言内容を二重配列に整頓
+            #2.時系列と発言者と発言内容を二重配列に整頓
             #行が変化する加工が完了したら実行
             count = 0
             txt.each do |s|
@@ -164,12 +164,12 @@ class UsersController < ApplicationController
               end
               count += 1
             end
-          #クイックリプライにクライアントが過去に送信したメッセージを入れる
-            #ユーザーを取得
+            #クイックリプライにクライアントが過去に送信したメッセージを入れる
+            #1.ユーザーを取得
             user = User.find_by!(user_id: event["source"]["userId"])
             #送られてきたtxtファイルのトークルーム名を役名として保存
             user.official_title = txt[0]
-            #配列の時系列の初期値を保存
+            #2.配列の時系列の初期値を保存
             count = 2
             user.resending_point = count
             if txt[2][1] == user.official_title
@@ -189,10 +189,10 @@ class UsersController < ApplicationController
               end
             end
             user.replay_point = count
-            #後にファイルを呼び出すときのメッセージIDを保存
+            #3.後にファイルを呼び出すときのメッセージIDを保存
             user.file_id = event.message['id']
             user.save!
-          #一番初めのメッセージを送信
+            #4.一番初めのメッセージを送信
             #初めのメッセージがクライアントの場合"スタート"のメッセージから始める
             message = {
               type: 'text',
