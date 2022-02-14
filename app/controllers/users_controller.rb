@@ -30,7 +30,7 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.gsub!(%r{\n}) { '' }
+              txt << line.gsub!(%r{/\n/}) { '' }
             end
             txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
@@ -46,11 +46,11 @@ class UsersController < ApplicationController
             txt.each do |s|
               case s
               when /[0-2][0-9]:[0-5][0-9]/
-                txt[count].gsub!(%r{\"}) { '' }
-                txt[count] = s.split(%r{\t})
-              when %r{\"}
+                txt[count].gsub!(/\"/) { '' }
+                txt[count] = s.split(%r{/\t/})
+              when /\"/
                 previous = count - 1
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(%r{\"}) { '' }]
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
               end
               count += 1
             end
@@ -115,7 +115,7 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.gsub!(%r{\n}) { '' }
+              txt << line.gsub!(%r{/\n/}) { '' }
             end
             txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
@@ -123,7 +123,7 @@ class UsersController < ApplicationController
             txt.each do |s|
               if s == ""
                 txt.delete(s)
-              elsif %r{保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]} === s
+              elsif %r{/保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/} === s
                 txt.delete(s)
               end
             end
@@ -131,11 +131,11 @@ class UsersController < ApplicationController
             txt.each do |s|
               case s
               when /[0-2][0-9]:[0-5][0-9]/
-                txt[count].gsub!(%r{\"}) { '' }
-                txt[count] = s.split(%r{\t})
-              when %r{\"}
+                txt[count].gsub!(/\"/) { '' }
+                txt[count] = s.split(%r{/\t/})
+              when %r{/\"/}
                 previous = count - 1
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(%r{\"}) { '' }]
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(%r{/\"/}) { '' }]
               end
               count += 1
             end
