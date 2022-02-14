@@ -30,9 +30,9 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.force_encoding("utf-8").gsub!(/\r\n/) { '' }
+              txt << line.gsub!(/\r\n/) { '' }
             end
-            # txt.map { |n| n.force_encoding("utf-8") }
+            txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
@@ -114,10 +114,10 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.force_encoding("utf-8").gsub!(/\r\n/) { '' }
+              txt << line.gsub!(/\r\n/) { '' }
             end
             p txt
-            # txt.map { |n| n.force_encoding("utf-8") }
+            txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
