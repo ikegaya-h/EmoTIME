@@ -115,6 +115,7 @@ class UsersController < ApplicationController
           case response
           when Net::HTTPSuccess then
             #response.body -> Strings
+            txt = []
             response.body.each_line { |line|
               txt << line.gsub!(/\n/) { '' }
             }
