@@ -47,7 +47,7 @@ class UsersController < ApplicationController
               case s
               when /[0-2][0-9]:[0-5][0-9]/
                 txt[count].gsub!(/\"/) { '' }
-                txt[count] = s.split(/\t/})
+                txt[count] = s.split(/\t/)
               when /\"/
                 previous = count - 1
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
@@ -134,10 +134,10 @@ class UsersController < ApplicationController
               case s
               when /[0-2][0-9]:[0-5][0-9]/
                 txt[count].gsub!(/\"/) { '' }
-                txt[count] = s.split(/\t/})
+                txt[count] = s.split(/\t/)
               when /\"/
                 previous = count - 1
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/}) { '' }]
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
               end
               count += 1
             end
