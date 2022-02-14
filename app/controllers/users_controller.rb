@@ -115,7 +115,7 @@ class UsersController < ApplicationController
           case response
           when Net::HTTPSuccess then
             #response.body -> Strings
-            response.body.lines.each_line { |line|
+            response.body.each_line { |line|
               txt << line.gsub!(/\n/) { '' }
             }
             #CompatibilityError回避のため正規表現と同じエンコードを指定
