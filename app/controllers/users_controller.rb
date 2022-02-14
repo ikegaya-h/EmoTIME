@@ -30,13 +30,13 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.gsub!(/\r\n/) { '' }
+              txt << line.force_encoding("utf-8")
             end
-            txt.map { |n| n.force_encoding("utf-8") }
+            # txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
-              if s == ""
+              if s == "\r\n"
                 txt.delete(s)
               elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
@@ -114,14 +114,14 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.gsub!(/\r\n/) { '' }
+              txt << line.force_encoding("utf-8")
             end
             p txt
-            txt.map { |n| n.force_encoding("utf-8") }
+            # txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
-              if s == ""
+              if s == "\r\n"
                 txt.delete(s)
               elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
