@@ -131,12 +131,12 @@ class UsersController < ApplicationController
             count = 0
             txt.each do |s|
               if /[0-2][0-9]:[0-5][0-9]/ === s
-                txt[count].gsub!(/\"/) { '' }
+                p s
+                txt[count] = s.gsub!(/\"/) { '' }
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
-                p s
                 previous = count - 1
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
+                txt[count] = [txt[previous][0], txt[previous][1], s.gsub!(/\"/) { '' }]
               end
               count += 1
             end
