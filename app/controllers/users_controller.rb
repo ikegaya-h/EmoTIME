@@ -134,6 +134,7 @@ class UsersController < ApplicationController
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
+                p s
                 previous = count - 1
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
               end
