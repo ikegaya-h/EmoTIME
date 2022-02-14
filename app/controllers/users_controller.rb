@@ -30,7 +30,7 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.force_encoding("utf-8").gsub!(/\r/) { '' }
+              txt << line.force_encoding("utf-8").gsub!(/\r\n/) { '' }
             end
             # txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
@@ -57,11 +57,11 @@ class UsersController < ApplicationController
             count = user.replay_point
             if client.reply_message == txt[user.resending_point][1]
               while txt[count][1] == user.official_title
-                send_message += "#{txt[count][2]}\r"
+                send_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
               until txt[count][1] == user.official_title
-                set_message += "#{txt[count][2]}\r"
+                set_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
               user.resending_point = user.replay_point
@@ -73,11 +73,11 @@ class UsersController < ApplicationController
             else
               count = user.resending_point
               while txt[count][1] == user.official_title
-                send_message += "#{txt[count][2]}\r"
+                send_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
               until txt[count][1] == user.official_title
-                set_message += "#{txt[count][2]}\r"
+                set_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
             end
@@ -115,7 +115,7 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.force_encoding("utf-8").gsub!(/\r/) { '' }
+              txt << line.force_encoding("utf-8").gsub!(/\r\n/) { '' }
             end
             p txt
             # txt.map { |n| n.force_encoding("utf-8") }
@@ -148,17 +148,17 @@ class UsersController < ApplicationController
             user.resending_point = count
             if txt[count][1] == user.official_title
               while txt[count][1] == user.official_title
-                send_message += "#{txt[count][2]}\r"
+                send_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
               until txt[count][1] == user.official_title
-                set_message += "#{txt[count][2]}\r"
+                set_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
             else
               send_message = "スタート"
               until txt[count][1] == user.official_title
-                set_message += "#{txt[count][2]}\r"
+                set_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
             end
