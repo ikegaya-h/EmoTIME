@@ -1,18 +1,18 @@
 class UsersController < ApplicationController
   def client
-    @client ||= Line::Bot::Client.new { |config|
+    @client ||= Line::Bot::Client.new do |config|
       config.channel_id = ENV["LINE_CHANNEL_ID"]
       config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
       config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
-    }
+    end
   end
 
   def callback
     body = request.body.read
 
-    signature = request.env['HTTP_X_LINE_SIGNATURE']
+    signature = request.env["HTTP_X_LINE_SIGNATURE"]
     unless client.validate_signature(body, signature)
-      error 400 do 'Bad Request' end
+      error 400 { "Bad Request" }
     end
 
     send_message = ""
@@ -29,16 +29,16 @@ class UsersController < ApplicationController
           case response
           when Net::HTTPSuccess
             txt = []
-            response.body.each_line { |line|
-              txt << line.gsub!(/\n/) { '' }
-            }
-            txt.map { |n| n.force_encoding('utf-8') }
+            response.body.each_line do |line|
+              txt << line.gsub!(%r/\n/) { '' }
+            end
+            txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
-              if "" == s
+              if s == ""
                 txt.delete(s)
-              elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
+              elsif %r/保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
               end
             end
@@ -46,21 +46,21 @@ class UsersController < ApplicationController
             txt.each do |s|
               case s
               when /[0-2][0-9]:[0-5][0-9]/
-                txt[count].gsub!(/\"/) { '' }
-                txt[count] = s.split(/\t/)
-              when /\"/
+                txt[count].gsub!(%r/\"/) { '' }
+                txt[count] = s.split(%r/\t/)
+              when %r/\"/
                 previous = count - 1
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(%r/\"/) { '' }]
               end
               count += 1
             end
             count = user.replay_point
             if client.reply_message == txt[user.resending_point][1]
-              while txt[count][1] == user.official_title do
+              while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\n"
                 count += 1
               end
-              until txt[count][1] == user.official_title do
+              until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\n"
                 count += 1
               end
@@ -72,17 +72,17 @@ class UsersController < ApplicationController
               user.save!
             else
               count = user.resending_point
-              while txt[count][1] == user.official_title do
+              while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\n"
                 count += 1
               end
-              until txt[count][1] == user.official_title do
+              until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\n"
                 count += 1
               end
             end
             message = {
-              type: 'text',
+              type: "text",
               text: send_message,
               sender: {
                 name: user.official_title
@@ -100,79 +100,70 @@ class UsersController < ApplicationController
                 ]
               }
             }
-            client.reply_message(event['replyToken'], message)
+            client.reply_message(event["replyToken"], message)
           end
         when Line::Bot::Event::MessageType::File
           unless /とのトーク.txt/ === event["message"]["fileName"]
             message = {
-              type: 'text',
+              type: "text",
               text: "指定のファイルと異なります"
             }
-            return client.reply_message(event['replyToken'], message)
+            return client.reply_message(event["replyToken"], message)
           end
-          response = client.get_message_content(event.message['id'])
+          response = client.get_message_content(event.message["id"])
           case response
           when Net::HTTPSuccess
             txt = []
-            response.body.each_line { |line|
-              txt << line.gsub!(/\n/) { '' }
-            }
-            txt.map { |n| n.force_encoding('utf-8') }
-            #配列を整形
+            response.body.each_line do |line|
+              txt << line.gsub!(%r/\n/) { '' }
+            end
+            txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
-            #1.保存日時と改行のみの行を削除
             txt.each do |s|
-              if "" == s
+              if s == ""
                 txt.delete(s)
-              elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
+              elsif %r/保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
               end
             end
-            #2.時系列と発言者と発言内容を二重配列に整頓
-            #行が変化する加工が完了したら実行
             count = 0
             txt.each do |s|
               case s
               when /[0-2][0-9]:[0-5][0-9]/
-                txt[count].gsub!(/\"/) { '' }
-                txt[count] = s.split(/\t/)
-              when /\"/
-                previous = 0
+                txt[count].gsub!(%r/\"/) { '' }
+                txt[count] = s.split(%r/\t/)
+              when %r/\"/
                 previous = count - 1
-                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(%r/\"/) { '' }]
               end
               count += 1
             end
-            #クイックリプライにクライアントが過去に送信したメッセージを入れる
-            #1.ユーザーを取得
             user = User.find_by!(user_id: event["source"]["userId"])
-            #送られてきたtxtファイルのトークルーム名を役名として保存
             user.official_title = txt[0]
-            #2.配列の時系列の初期値を保存
             count = 2
             user.resending_point = count
             if txt[count][1] == user.official_title
-              while txt[count][1] == user.official_title do
+              while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\n"
                 count += 1
               end
-              until txt[count][1] == user.official_title do
+              until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\n"
                 count += 1
               end
             else
               send_message = "スタート"
-              until txt[count][1] == user.official_title do
+              until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\n"
                 count += 1
               end
             end
             user.replay_point = count
-            user.file_id = event.message['id']
+            user.file_id = event.message["id"]
             user.save!
             message = {
-              type: 'text',
+              type: "text",
               text: send_message,
               sender: {
                 name: user.official_title
@@ -190,14 +181,14 @@ class UsersController < ApplicationController
                 ]
               }
             }
-            client.reply_message(event['replyToken'], message)
+            client.reply_message(event["replyToken"], message)
           end
         end
-      when Line::Bot::Event::Follow 
+      when Line::Bot::Event::Follow
         user = User.new
         user.user_id = event["source"]["userId"]
         user.save!
-      when Line::Bot::Event::Unfollow 
+      when Line::Bot::Event::Unfollow
         user = User.find_by!(user_id: event["source"]["userId"])
         user.destroy!
       end
