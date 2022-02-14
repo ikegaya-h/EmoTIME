@@ -172,7 +172,7 @@ class UsersController < ApplicationController
             #2.配列の時系列の初期値を保存
             count = 2
             user.resending_point = count
-            if txt[2][1] == user.official_title
+            if txt[count][1] == user.official_title
               while txt[count][1] == user.official_title do
                 send_message += "#{txt[count][2]}\n"
                 count += 1
