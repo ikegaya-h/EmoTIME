@@ -115,7 +115,7 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.gsub!(%r{/\n/}) { '' }
+              txt << line.gsub!(/\n/) { '' }
             end
             txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
