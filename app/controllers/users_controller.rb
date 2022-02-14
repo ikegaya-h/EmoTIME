@@ -115,7 +115,9 @@ class UsersController < ApplicationController
           case response
           when Net::HTTPSuccess then
             #response.body -> Strings
-            txt = response.body.lines.delete("\n")
+            response.body.lines.each_line { |line|
+              txt << line.gsub!(/\n/) { '' }
+            }
             #CompatibilityError回避のため正規表現と同じエンコードを指定
             txt.map {|n| n.force_encoding('utf-8') }
             #配列を整形
