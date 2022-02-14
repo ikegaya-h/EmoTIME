@@ -115,7 +115,7 @@ class UsersController < ApplicationController
           case response
           when Net::HTTPSuccess then
             #response.body -> Strings
-            txt = response.body.lines(chomp: true)
+            txt = response.body.lines.delete("\n")
             #CompatibilityError回避のため正規表現と同じエンコードを指定
             txt.map {|n| n.force_encoding('utf-8') }
             #配列を整形
@@ -123,7 +123,7 @@ class UsersController < ApplicationController
             txt[0] = txt[0].delete("とのトーク履歴")
             #保存日時と改行のみの行を削除
             txt.each do |s|
-              if "\r" == s
+              if "" == s
                 txt.delete(s)
               elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
@@ -133,8 +133,14 @@ class UsersController < ApplicationController
             #行が変化する加工が完了したら実行
             count = 0
             txt.each do |s|
-              if /[0-2][0-9]:[0-5][0-9]/ === s
+              case s
+              when /[0-2][0-9]:[0-5][0-9]/
+                txt[count].gsub!(/\"/) { '' }
                 txt[count] = s.split(/\t/)
+              when /\"/
+                previous = 0
+                previous = count - 1
+                txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
               end
               count += 1
             end
