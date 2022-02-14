@@ -44,11 +44,10 @@ class UsersController < ApplicationController
             end
             count = 0
             txt.each do |s|
-              case s
-              when /[0-2][0-9]:[0-5][0-9]/
+              if /[0-2][0-9]:[0-5][0-9]/ === s
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = s.split(/\t/)
-              when /\"/
+              elsif /\"/ === s
                 previous = count - 1
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
               end
@@ -131,11 +130,10 @@ class UsersController < ApplicationController
             p txt
             count = 0
             txt.each do |s|
-              case s
-              when /[0-2][0-9]:[0-5][0-9]/
+              if /[0-2][0-9]:[0-5][0-9]/ === s
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = s.split(/\t/)
-              when /\"/
+              elsif /\"/ === s
                 previous = count - 1
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count].gsub!(/\"/) { '' }]
               end
