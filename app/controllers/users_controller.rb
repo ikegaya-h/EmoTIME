@@ -117,6 +117,7 @@ class UsersController < ApplicationController
             response.body.each_line do |line|
               txt << line.gsub!(/\n/) { '' }
             end
+            p txt
             txt.map { |n| n.force_encoding("utf-8") }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
@@ -127,6 +128,7 @@ class UsersController < ApplicationController
                 txt.delete(s)
               end
             end
+            p txt
             count = 0
             txt.each do |s|
               case s
@@ -139,6 +141,7 @@ class UsersController < ApplicationController
               end
               count += 1
             end
+            p txt
             user = User.find_by!(user_id: event["source"]["userId"])
             user.official_title = txt[0]
             count = 2
