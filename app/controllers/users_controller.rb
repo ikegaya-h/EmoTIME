@@ -57,6 +57,7 @@ class UsersController < ApplicationController
               count += 1
             end
             count = user.replay_point
+            user.
             if client.reply_message == txt[user.resending_point][1]
               while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\r\n"
