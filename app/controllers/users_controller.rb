@@ -24,7 +24,7 @@ class UsersController < ApplicationController
       when Line::Bot::Event::Message
         case event.type
         when Line::Bot::Event::MessageType::Text
-          user = User.find_by!(user_id: client.channel_id)
+          user = User.find_by!(user_id: event["source"]["userId"])
           response = client.get_message_content(user.file_id)
           case response
           when Net::HTTPSuccess
