@@ -40,6 +40,8 @@ class UsersController < ApplicationController
                 txt.delete(s)
               elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
+              elsif /20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\((月|火|水|木|金|土|日)\)/ === s
+                txt.delete(s)
               end
             end
             count = 0
@@ -51,8 +53,6 @@ class UsersController < ApplicationController
                 previous = count - 1
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
-              elsif /20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\((月|火|水|木|金|土|日)\)/ === s
-                txt.delete(s)
               end
               count += 1
             end
@@ -133,6 +133,8 @@ class UsersController < ApplicationController
                 txt.delete(s)
               elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
+              elsif /20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\((月|火|水|木|金|土|日)\)/ === s
+                txt.delete(s)
               end
             end
             p txt
@@ -145,8 +147,6 @@ class UsersController < ApplicationController
                 previous = count - 1
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
-              elsif /20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\((月|火|水|木|金|土|日)\)/ === s
-                txt.delete(s)
               end
               count += 1
             end
