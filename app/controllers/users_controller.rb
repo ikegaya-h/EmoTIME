@@ -79,6 +79,9 @@ class UsersController < ApplicationController
               user.resending_point = user.replay_point
               unless set_message
                 set_message = "~end~"
+                user.resending_point = 0
+                user.replay_point = 0
+                user.verification_point = 0
               end
               user.save!
             else
