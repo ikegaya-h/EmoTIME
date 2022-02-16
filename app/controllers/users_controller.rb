@@ -63,7 +63,7 @@ class UsersController < ApplicationController
             p event["message"]["text"]
             p set_message
             count = user.replay_point
-            if event["message"]["text"] == set_message
+            if "#{event["message"]["text"]}\r\n" == set_message
               while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\r\n"
                 count += 1
