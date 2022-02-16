@@ -70,7 +70,6 @@ class UsersController < ApplicationController
               end
               unless send_message
                 send_message = "~end~"
-                user.replay_point = 2
               end
               until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\r\n"
@@ -79,7 +78,6 @@ class UsersController < ApplicationController
               user.resending_point = user.replay_point
               unless set_message
                 set_message = "~end~"
-                user.replay_point = 2
               end
               user.save!
             else
