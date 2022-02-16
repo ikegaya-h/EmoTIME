@@ -153,7 +153,7 @@ class UsersController < ApplicationController
             p txt
             user = User.find_by!(user_id: event["source"]["userId"])
             user.official_title = txt[0]
-            count = 2
+            count = 1
             user.resending_point = count
             if txt[count][1] == user.official_title
               while txt[count][1] == user.official_title
