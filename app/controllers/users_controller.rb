@@ -68,6 +68,10 @@ class UsersController < ApplicationController
                 send_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
+              unless send_message
+                send_message = "~end~"
+                user.replay_point = 2
+              end
               until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
