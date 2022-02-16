@@ -51,6 +51,8 @@ class UsersController < ApplicationController
                 previous = count - 1
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
+              elsif /20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\((月|火|水|木|金|土|日)\)/ === s
+                txt.delete(s)
               end
               count += 1
             end
@@ -138,6 +140,8 @@ class UsersController < ApplicationController
                 previous = count - 1
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
+              elsif /20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\((月|火|水|木|金|土|日)\)/ === s
+                txt.delete(s)
               end
               count += 1
             end
