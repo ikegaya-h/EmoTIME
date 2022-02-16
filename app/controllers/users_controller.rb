@@ -62,9 +62,9 @@ class UsersController < ApplicationController
             end
             p event["message"]["text"]
             p set_message
-            count = user.replay_point
             if "#{event["message"]["text"]}\r\n" == set_message
               set_message = ""
+              user.resending_point = count
               while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\r\n"
                 count += 1
@@ -77,11 +77,9 @@ class UsersController < ApplicationController
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
-              user.resending_point = user.replay_point
               unless set_message
                 set_message = "~end~"
                 user.resending_point = 0
-                user.replay_point = 0
                 user.verification_point = 0
               end
               user.save!
@@ -182,7 +180,6 @@ class UsersController < ApplicationController
                 count += 1
               end
             end
-            user.replay_point = count
             user.file_id = event.message["id"]
             user.save!
             message = {
