@@ -188,13 +188,13 @@ class UsersController < ApplicationController
                 txt[count] = s.delete("\\\"")
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
+                p txt
                 previous = count - 1
                 txt[count] = s.delete("\\\"")
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
               end
               count += 1
             end
-            p txt
             user = User.find_by!(user_id: event["source"]["userId"])
             user.official_title = txt[0]
             count = 1
