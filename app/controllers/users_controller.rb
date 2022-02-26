@@ -49,11 +49,11 @@ class UsersController < ApplicationController
             count = 0
             txt.each do |s|
               if /[0-9]:[0-5][0-9]/ === s
-                txt[count].gsub!(/\"/) { '' }
+                txt[count] = txt[count].delete("\\\"")
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
                 previous = count - 1
-                txt[count].gsub!(/\"/) { '' }
+                txt[count] = txt[count].delete("\\\"")
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
               end
               count += 1
@@ -185,11 +185,11 @@ class UsersController < ApplicationController
             count = 0
             txt.each do |s|
               if /[0-9]:[0-5][0-9]/ === s
-                txt[count].gsub!(/\"/) { '' }
+                txt[count] = txt[count].delete("\\\"")
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
                 previous = count - 1
-                txt[count].gsub!(/\"/) { '' }
+                txt[count] = txt[count].delete("\\\"")
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
               end
               count += 1
