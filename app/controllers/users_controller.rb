@@ -180,11 +180,7 @@ class UsersController < ApplicationController
             # p txt
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
-            txt.each do |s|
-              if s == ""
-                txt.delete(s)
-              end
-            end
+            txt.delete("")
             # p txt
             count = 0
             txt.each do |s|
