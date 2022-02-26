@@ -62,28 +62,50 @@ class UsersController < ApplicationController
             until txt[count][1] == user.official_title
               set_message += "#{txt[count][2]}\r\n"
               count += 1
+              break if txt[count][1].nil?
             end
             p event["message"]["text"]
             p set_message
             if "#{event["message"]["text"]}\r\n" == set_message
+              if txt[count][1].nil?
+                send_message += "~end~"
+                message = {
+                  type: "text",
+                  text: send_message,
+                }
+                client.reply_message(event["replyToken"], message)
+                user.resending_point = 0
+                user.verification_point = 0
+                user.save!
+                return
+              end
               set_message = ""
               user.resending_point = count
               while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\r\n"
                 count += 1
+                break if txt[count][1].nil?
+              end
+              if txt[count][1].nil?
+                send_message += "~end~"
+                message = {
+                  type: "text",
+                  text: send_message,
+                  sender: {
+                    name: user.official_title
+                  }
+                }
+                client.reply_message(event["replyToken"], message)
+                user.resending_point = 0
+                user.verification_point = 0
+                user.save!
+                return
               end
               user.verification_point = count
-              unless send_message
-                send_message = "~end~"
-              end
               until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
-              end
-              unless set_message
-                set_message = "~end~"
-                user.resending_point = 0
-                user.verification_point = 0
+                break if txt[count][1].nil?
               end
               user.save!
             else
