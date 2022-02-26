@@ -88,9 +88,6 @@ class UsersController < ApplicationController
                 send_message += "#{txt[count][2]}\r\n"
                 count += 1
                 break if txt[count].nil?
-                if txt[count][1].nil?
-                  txt.delete(txt[count])
-                end
               end
               if txt[count].nil?
                 send_message += "~end~"
@@ -112,27 +109,14 @@ class UsersController < ApplicationController
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
                 break if txt[count].nil?
-                if txt[count][1].nil?
-                  txt.delete(txt[count])
-                end
-              end
-              user.save!
-            else
-              set_message = ""
               count = user.resending_point
               while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\r\n"
                 count += 1
-                if txt[count][1].nil?
-                  txt.delete(txt[count])
-                end
               end
               until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
-                if txt[count][1].nil?
-                  txt.delete(txt[count])
-                end
               end
             end
             message = {
@@ -205,17 +189,11 @@ class UsersController < ApplicationController
               while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\r\n"
                 count += 1
-                if txt[count][1].nil?
-                  txt.delete(txt[count])
-                end
               end
               user.verification_point = count
               until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
-                if txt[count][1].nil?
-                  txt.delete(txt[count])
-                end
               end
             else
               send_message = "スタート"
@@ -223,9 +201,6 @@ class UsersController < ApplicationController
               until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
-                if txt[count][1].nil?
-                  txt.delete(txt[count])
-                end
               end
             end
             user.file_id = event.message["id"]
