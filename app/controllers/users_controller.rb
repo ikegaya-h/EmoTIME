@@ -132,6 +132,8 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
+              p line
+              p line.encoding
               txt << line.force_encoding("utf-8")
             end
             p txt
