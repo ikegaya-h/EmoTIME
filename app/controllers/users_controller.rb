@@ -184,10 +184,12 @@ class UsersController < ApplicationController
             # p txt
             count = 0
             txt.each do |s|
-              if /[0-9]:[0-5][0-9]/ === s
+              case s
+              when /[0-9]:[0-5][0-9]/
                 txt[count] = s.delete("\\\"")
                 txt[count] = s.split(/\t/)
-              elsif /\"/ === s
+              when txt[0]
+              else
                 previous = count - 1
                 txt[count] = s.delete("\\\"")
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
