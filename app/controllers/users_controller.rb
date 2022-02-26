@@ -34,7 +34,7 @@ class UsersController < ApplicationController
             end
             p txt
             txt.map { |n| n.gsub!(/\r\n/) { '' } }
-            txt.map { |n| n.gsub!(/20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\((月|火|水|木|金|土|日)\)/) { '' } }
+            txt.map { |n| n.gsub!(/20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\(.\)/) { '' } }
             p txt
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
@@ -175,7 +175,7 @@ class UsersController < ApplicationController
             end
             # p txt
             txt.map { |n| n.gsub!(/\r\n/) { '' } }
-            txt.map { |n| n.gsub!(/20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\((月|火|水|木|金|土|日)\)/) { '' } }
+            txt.map { |n| n.gsub!(/20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\(.\)/) { '' } }
             txt[1] = ""
             # p txt
             txt[0] = txt[0].delete("[LINE] ")
