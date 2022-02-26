@@ -62,12 +62,12 @@ class UsersController < ApplicationController
             until txt[count][1] == user.official_title
               set_message += "#{txt[count][2]}\r\n"
               count += 1
-              break if txt[count][1].nil?
+              break if txt[count].nil?
             end
             p event["message"]["text"]
             p set_message
             if "#{event["message"]["text"]}\r\n" == set_message
-              if txt[count][1].nil?
+              if txt[count].nil?
                 send_message += "~end~"
                 message = {
                   type: "text",
@@ -84,9 +84,9 @@ class UsersController < ApplicationController
               while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\r\n"
                 count += 1
-                break if txt[count][1].nil?
+                break if txt[count].nil?
               end
-              if txt[count][1].nil?
+              if txt[count].nil?
                 send_message += "~end~"
                 message = {
                   type: "text",
@@ -105,7 +105,7 @@ class UsersController < ApplicationController
               until txt[count][1] == user.official_title
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
-                break if txt[count][1].nil?
+                break if txt[count].nil?
               end
               user.save!
             else
