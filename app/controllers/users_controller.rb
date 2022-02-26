@@ -34,14 +34,14 @@ class UsersController < ApplicationController
             end
             p txt
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
-            txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\(.\)/) { '' } }
+            txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
             p txt
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
               if s == ""
                 txt.delete(s)
-              elsif /保存日時：20[0-9][0-9]\/[01][0-2]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
+              elsif /保存日時：20[0-9][0-9]\/[01][0-9]\/[0-3][0-9] [0-2][0-9]:[0-5][0-9]/ === s
                 txt.delete(s)
               end
             end
@@ -175,7 +175,7 @@ class UsersController < ApplicationController
             end
             # p txt
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
-            txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-2]\/[0-3][0-9]\(.\)/) { '' } }
+            txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
             txt[1] = ""
             # p txt
             txt[0] = txt[0].delete("[LINE] ")
@@ -188,7 +188,6 @@ class UsersController < ApplicationController
                 txt[count] = s.delete("\\\"")
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
-                p txt
                 previous = count - 1
                 txt[count] = s.delete("\\\"")
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
