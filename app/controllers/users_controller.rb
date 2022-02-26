@@ -109,6 +109,10 @@ class UsersController < ApplicationController
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
                 break if txt[count].nil?
+              end
+              user.save!
+            else
+              set_message = ""
               count = user.resending_point
               while txt[count][1] == user.official_title
                 send_message += "#{txt[count][2]}\r\n"
