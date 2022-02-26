@@ -201,7 +201,9 @@ class UsersController < ApplicationController
             else
               send_message = "スタート"
               user.verification_point = count
+              p txt[count]
               until txt[count][1] == user.official_title
+                p txt[count][2]
                 set_message += "#{txt[count][2]}\r\n"
                 count += 1
               end
