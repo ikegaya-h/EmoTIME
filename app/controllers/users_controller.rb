@@ -48,7 +48,7 @@ class UsersController < ApplicationController
             p txt
             count = 0
             txt.each do |s|
-              if /[0-2][0-9]:[0-5][0-9]/ === s
+              if /[0-9]:[0-5][0-9]/ === s
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
@@ -184,7 +184,7 @@ class UsersController < ApplicationController
             # p txt
             count = 0
             txt.each do |s|
-              if /[0-2][0-9]:[0-5][0-9]/ === s
+              if /[0-9]:[0-5][0-9]/ === s
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = s.split(/\t/)
               elsif /\"/ === s
