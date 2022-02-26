@@ -196,6 +196,7 @@ class UsersController < ApplicationController
               end
               count += 1
             end
+            p txt
             user = User.find_by!(user_id: event["source"]["userId"])
             user.official_title = txt[0]
             count = 1
