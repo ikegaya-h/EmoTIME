@@ -168,11 +168,10 @@ class UsersController < ApplicationController
             # p txt
             count = 0
             txt.each do |s|
-              case s
-              when /[0-9]:[0-5][0-9]/
+              if /[0-9]:[0-5][0-9]/ === s
                 txt[count] = s.delete("\\\"")
                 txt[count] = s.split(/\t/)
-              when txt[0]
+              elsif txt[0] == s
               else
                 previous = count - 1
                 txt[count] = s.delete("\\\"")
