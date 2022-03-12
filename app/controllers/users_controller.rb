@@ -1,5 +1,3 @@
-require "nkf"
-
 class UsersController < ApplicationController
   def client
     @client ||= Line::Bot::Client.new do |config|
@@ -32,12 +30,13 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << NKF.nkf("-w", line)
+              txt << line.force_encoding("UTF-8")
             end
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
             txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
+            txt[0] = txt[0].delete("\uFEFF")
             txt.each do |s|
               if s == ""
                 txt.delete(s)
@@ -169,6 +168,7 @@ class UsersController < ApplicationController
             # p txt
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
+            txt[0] = txt[0].delete("\uFEFF")
             txt.delete("")
             # p txt
             count = 0
