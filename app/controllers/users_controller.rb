@@ -54,6 +54,7 @@ class UsersController < ApplicationController
                 previous = count - 1
                 txt[count] = s.delete("\\\"")
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
+                p s
               end
               count += 1
             end
