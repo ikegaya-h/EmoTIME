@@ -159,7 +159,7 @@ class UsersController < ApplicationController
             response.body.each_line do |line|
               # p line
               # p line.encoding
-              txt << NKF.nkf("-w", line)
+              txt << line.force_encoding("UTF-8")
             end
             # p txt
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
