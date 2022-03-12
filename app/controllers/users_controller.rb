@@ -34,10 +34,8 @@ class UsersController < ApplicationController
             response.body.each_line do |line|
               txt << NKF.nkf("-w", line)
             end
-            p txt
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
             txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
-            p txt
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt.each do |s|
@@ -47,7 +45,6 @@ class UsersController < ApplicationController
                 txt.delete(s)
               end
             end
-            p txt
             count = 0
             txt.each do |s|
               if /[0-9]:[0-5][0-9]/ === s
@@ -60,6 +57,7 @@ class UsersController < ApplicationController
               end
               count += 1
             end
+            p txt
             count = user.verification_point
             until txt[count][1] == user.official_title
               set_message += "#{txt[count][2]}\r\n"
