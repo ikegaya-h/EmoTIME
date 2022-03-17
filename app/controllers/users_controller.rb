@@ -61,6 +61,7 @@ class UsersController < ApplicationController
             count = user.verification_point
             until txt[count][1] == user.official_title
               set_message += "#{txt[count][2]}\r\n"
+              p set_message
               count += 1
               break if txt[count].nil?
               if txt[count][2].nil?
