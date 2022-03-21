@@ -53,11 +53,10 @@ class UsersController < ApplicationController
               if /[0-9]:[0-5][0-9]/ === s
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = s.split(/\t/)
-              elsif /\"/ === s
+              else
                 previous = count - 1
                 txt[count].gsub!(/\"/) { '' }
                 txt[count] = [txt[previous][0], txt[previous][1], txt[count]]
-                p s
               end
               count += 1
             end
