@@ -44,6 +44,10 @@ class UsersController < ApplicationController
                 txt.delete(s)
               end
             end
+            p txt
+            p txt[2][2]
+            p txt[3][2]
+            p txt[4][2]
             count = 0
             txt.each do |s|
               if /[0-9]:[0-5][0-9]/ === s
@@ -57,9 +61,6 @@ class UsersController < ApplicationController
               end
               count += 1
             end
-            p txt[2][2]
-            p txt[3][2]
-            p txt[4][2]
             count = user.verification_point
             until txt[count][1] == user.official_title
               set_message += "#{txt[count][2]}\r\n"
