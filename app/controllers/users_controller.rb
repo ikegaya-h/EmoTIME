@@ -44,10 +44,6 @@ class UsersController < ApplicationController
                 txt.delete(s)
               end
             end
-            p txt
-            p txt[2][2]
-            p txt[3][2]
-            p txt[4][2]
             count = 0
             txt.each do |s|
               if /[0-9]:[0-5][0-9]/ === s
@@ -63,15 +59,12 @@ class UsersController < ApplicationController
             count = user.verification_point
             until txt[count][1] == user.official_title
               set_message += "#{txt[count][2]}\r\n"
-              p set_message
               count += 1
               break if txt[count].nil?
               if txt[count][2].nil?
                 txt.delete(txt[count][2])
               end
             end
-            p event["message"]["text"]
-            p set_message
             if "#{event["message"]["text"]}\r\n" == set_message
               if txt[count].nil?
                 send_message += "~end~"
@@ -160,20 +153,15 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              # p line
-              # p line.encoding
               txt << line.force_encoding("UTF-8")
             end
-            # p txt
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
             txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
             txt[1] = ""
-            # p txt
             txt[0] = txt[0].delete("[LINE] ")
             txt[0] = txt[0].delete("とのトーク履歴")
             txt[0] = txt[0].delete("\uFEFF")
             txt.delete("")
-            # p txt
             count = 0
             txt.each do |s|
               if /[0-9]:[0-5][0-9]/ === s
