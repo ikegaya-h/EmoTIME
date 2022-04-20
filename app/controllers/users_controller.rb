@@ -34,8 +34,8 @@ class UsersController < ApplicationController
             end
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
             txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
-            txt[0] = txt[0].delete("[LINE] ")
-            txt[0] = txt[0].delete("とのトーク履歴")
+            txt[0].delete_prefix!("[LINE] ")
+            txt[0].delete_suffix!("とのトーク履歴")
             txt.each do |s|
               if s == ""
                 txt.delete(s)
@@ -157,8 +157,8 @@ class UsersController < ApplicationController
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
             txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
             txt[1] = ""
-            txt[0] = txt[0].delete("[LINE] ")
-            txt[0] = txt[0].delete("とのトーク履歴")
+            txt[0].delete_prefix!("[LINE] ")
+            txt[0].delete_suffix!("とのトーク履歴")
             txt.delete("")
             count = 0
             txt.each do |s|
