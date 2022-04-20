@@ -30,7 +30,7 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.force_encoding("UTF-8")
+              txt << NKF.nkf('-w -m0', line)
             end
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
             txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
@@ -153,7 +153,7 @@ class UsersController < ApplicationController
           when Net::HTTPSuccess
             txt = []
             response.body.each_line do |line|
-              txt << line.force_encoding("UTF-8")
+              txt << NKF.nkf('-w -m0', line)
             end
             txt.map! { |n| n.gsub(/\r\n/) { '' } }
             txt.map! { |n| n.gsub(/20[0-9][0-9]\/[01][0-9]\/[0-3][0-9]\(.\)/) { '' } }
